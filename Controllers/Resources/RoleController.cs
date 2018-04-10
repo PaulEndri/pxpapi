@@ -43,5 +43,19 @@ namespace PixelPubApi.Controllers.Resources
         {
             return await _getOne(id);
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(List<DiscordRole>), 200)]
+        public async Task<IActionResult> post([FromBody] DiscordRole record)
+        {
+            return await _create(record);
+        }
+
+        [HttpPut("{id:long}")]
+        [ProducesResponseType(typeof(DiscordRole), 200)]
+        public async Task<IActionResult> put([FromRoute] long id, [FromBody] DiscordRole role)
+        {
+            return await _put(id, role);
+        }
     }
 }

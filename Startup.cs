@@ -73,11 +73,9 @@ namespace PixelPubApi
                 app.UseDeveloperExceptionPage();
             }
 
-            if(!env.IsProduction()) {
                 app.UseSwaggerUI(c => {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pixel Pub API API V1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pixel Pub API V1");
                 });
-            }
 
             app.UseSwagger();
             app.UseMiddleware<ApiAuthMiddleWare>();

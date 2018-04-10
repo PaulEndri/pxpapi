@@ -32,21 +32,24 @@ namespace PixelPubApi.Models.Entities
         [ForeignKey("active_clan_id")]
         public List<Member> Members {get; set;}
 
+        public Clan(WrathIncarnateContext context) : base(context) { }
+        public Clan() { }
+
         override public string getTableName() {
             return "bungie_clan";
         }
 
-        override public async Task<List<T>> getAllLoaded<T>(WrathIncarnateContext context, int pageNumber, int pageSize) {
-            return await getRecord<T>(context);
+        override public async Task<List<T>> getAllLoaded<T>(int pageNumber, int pageSize) {
+            return await getRecord<T>();
         }
-        override public async Task<T> getById<T>(WrathIncarnateContext context, long id) {
+        override public async Task<T> getById<T>(long id) {
             var where   = $"WHERE c.id = {id}";
-            var results = await getRecord<T>(context, where) as List<T>;
+            var results = await getRecord<T>(where) as List<T>;
 
             return results.FirstOrDefault();
         }
 
-        private async Task<List<T>> getRecord<T>(WrathIncarnateContext context, string where = "") {
+        private async Task<List<T>> getRecord<T>(string where = "") {
             var tableName  = getTableName();
             var primaryKey = getPrimaryKey();
             var clanDict   = new Dictionary<long, Clan>();
@@ -54,7 +57,7 @@ namespace PixelPubApi.Models.Entities
             var query = $"{SEARCH} {tableName} c LEFT JOIN bungie_member m ON m.active_clan_id = c.id"
                 + $" AND m.deleted = 0 and c.deleted = 0 {where} ORDER BY c.{primaryKey} DESC";
 
-            var results = await context.connection.QueryAsync<Clan, Member, Clan>(query, (clan, member) => {
+            var results = await _context.connection.QueryAsync<Clan, Member, Clan>(query, (clan, member) => {
                 Clan entry;
 
                 if(!clanDict.TryGetValue(clan.id, out entry)) {

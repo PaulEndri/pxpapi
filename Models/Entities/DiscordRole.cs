@@ -14,6 +14,7 @@ using PixelPubApi.MySQL;
 
 namespace PixelPubApi.Models.Entities
 {
+    [Table("discord_roles")]
     public class DiscordRole : Model
     {
         [Key]
@@ -25,8 +26,21 @@ namespace PixelPubApi.Models.Entities
         public DateTime updated_at { get; set; }
         public DateTime created_at { get; set; }
 
+        public DiscordRole(WrathIncarnateContext context) : base(context) { }
+        public DiscordRole() { }
+
         override public string getTableName() {
             return "discord_roles";
+        }
+
+        override public string getInsertQuery()
+        {
+            return "INSERT INTO discord_roles (name, value, reaction, identifier, updated_at, created_at) values (@name, @value, @reaction, @identifier, NOW(), NOW())"; 
+        }
+
+        override public string getPutQuery(long id)
+        {
+            return $"UPDATE discord_roles SET name=@name, value=@value, reaction=@reaction, identifier=@identifier, updated_at=NOW() where id = {id}";
         }
     }
 }

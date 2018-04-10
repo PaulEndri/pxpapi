@@ -12,7 +12,7 @@ namespace PixelPubApi.Interfaces {
     {
         Task<List<TEntity>> GetAllLoaded(int pageNumber = 1, int pageSize = 100);
         Task<List<TEntity>> GetAll(int pageSize, int pageNumber);
-
+        Task<TEntity> Replace(long id, TEntity record);
         Task<TEntity> GetById(int id);
     }
 }

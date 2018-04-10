@@ -17,7 +17,7 @@ namespace PixelPubApi.Controllers.Resources
         protected ApiRepository<T> _repository;
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        public virtual ActionResult _get(DateTime? dateCreatedBefore, DateTime? dateCreatedAfter, int pageSize = 50, int pageNumber = 1)
+        public ActionResult _get(DateTime? dateCreatedBefore, DateTime? dateCreatedAfter, int pageSize = 50, int pageNumber = 1)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace PixelPubApi.Controllers.Resources
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        public virtual async Task<IActionResult> _getOne([FromRoute] int id)
+        public async Task<IActionResult> _getOne([FromRoute] int id)
         {
             try
             {
@@ -42,6 +42,30 @@ namespace PixelPubApi.Controllers.Resources
             }
             catch (Exception e)
             {
+                return BadRequest(e);
+            }
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> _create(T record)
+        {
+            try {
+                return Ok(
+                    await _repository.Create(record)
+                );
+            } catch (Exception e) {
+                return BadRequest(e);
+            }
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> _put(long id, T record)
+        {
+            try {
+                return Ok(
+                    await _repository.Replace(id, record)
+                );
+            } catch  (Exception e) {
                 return BadRequest(e);
             }
         }
