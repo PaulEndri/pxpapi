@@ -22,6 +22,17 @@ namespace PixelPubApi.Repository.Api
             context.connection.Open();
             _context = context;
         }
+
+        public async Task<List<TEntity>> GetAllLoaded(int pageNumber = 1, int pageSize = 100) {
+            if (pageSize > 1000) {
+                pageSize = 1000;
+            }
+
+            var entity = (TEntity)typeof(TEntity).GetConstructors()[0].Invoke(null);
+
+            return await entity.getAllLoaded<TEntity>(_context, pageNumber, pageSize);
+        }
+
         public async Task<List<TEntity>> GetAll(int pageNumber = 1, int pageSize = 100)
         {
             if(pageSize > 1000) {

@@ -29,6 +29,10 @@ namespace PixelPubApi.Models
             return "";
         }
 
+        virtual public async Task<List<T>> getAllLoaded<T>(WrathIncarnateContext context, int pageNumber = 1, int pageSize = 100) {
+            return await getAll<T>(context, pageNumber, pageSize);
+        }
+
         virtual public async Task<List<T>> getAll<T>(WrathIncarnateContext context, int pageNumber = 1, int pageSize = 100) {
             if (pageSize > 1000) {
                 pageSize = 1000;

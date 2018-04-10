@@ -37,6 +37,17 @@ namespace PixelPubApi.Controllers.Resources
             }
         }
 
+        [HttpGet("members")]
+        [ProducesResponseType(typeof(List<Clan>), 200)]
+        public async Task<ActionResult> getWithMembers()
+        {
+            try {
+                return Ok(await _repository.GetAllLoaded(0, 0));
+            } catch (Exception e) {
+                return BadRequest(e);
+            }
+        }
+
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(Clan), 200)]
         public async Task<IActionResult> getOne([FromRoute] int id)

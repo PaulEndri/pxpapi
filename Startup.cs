@@ -36,7 +36,7 @@ namespace PixelPubApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Database connection
-            var dbString = Environment.GetEnvironmentVariable("DBConnection");
+            var dbString = "server=208.97.173.174;database=winpixelpub;user=winpixelpub;password=wrathIncarnate";
 
             // Singleton Services
             services.AddSingleton<IRestClientFactory, RestClientFactory>();

@@ -36,12 +36,12 @@ namespace PixelPubApi.Models.Entities
             return "bungie_clan";
         }
 
-        override public async Task<List<T>> getAll<T>(WrathIncarnateContext context, int pageNumber = 1, int pageSize = 100) {
+        override public async Task<List<T>> getAllLoaded<T>(WrathIncarnateContext context, int pageNumber, int pageSize) {
             return await getRecord<T>(context);
         }
         override public async Task<T> getById<T>(WrathIncarnateContext context, long id) {
             var where   = $"WHERE c.id = {id}";
-            var results = await getRecord<Clan>(context, where) as List<T>;
+            var results = await getRecord<T>(context, where) as List<T>;
 
             return results.FirstOrDefault();
         }
