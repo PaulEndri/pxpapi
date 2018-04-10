@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using PixelPubApi.MySQL;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using MySql.Data.EntityFrameworkCore;
+using PixelPubApi.Providers;
+using PixelPubApi.Interfaces;
 using Serilog;
 
 #endregion
@@ -22,7 +22,7 @@ namespace PixelPubApi.Middleware
             next = _next;
         }
 
-        public async Task Invoke(HttpContext context, WrathIncarnateContext dbcontext)
+        public async Task Invoke(HttpContext context, IApiAccessProvider provider)
         {
             var request  = context.Request;
             var headers  = request.Headers;
@@ -33,7 +33,7 @@ namespace PixelPubApi.Middleware
                 await next.Invoke(context);
             } else {
                 var key   = !string.IsNullOrEmpty(headers["X-API-KEY"].ToString()) ? headers["X-API-KEY"].ToString() : "";
-                var found = validate(key, dbcontext);
+                var found = string.IsNullOrEmpty(key) ? false : await validate(key, provider);
 
                 if (found == false)
                 {
@@ -50,9 +50,9 @@ namespace PixelPubApi.Middleware
 
 
 
-        private bool validate(string key, WrathIncarnateContext context)
+        private async Task<bool> validate(string key, IApiAccessProvider provider)
         {
-            var found = context.ApiAccess.FirstOrDefault(a => a.key == key);
+            var found = await provider.getByKey(key);
 
             return found != null;
         }

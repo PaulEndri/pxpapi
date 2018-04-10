@@ -22,7 +22,7 @@ namespace PixelPubApi.Controllers.Resources
             try
             {
                 return Ok(
-                    _repository.GetAll(dateCreatedAfter, dateCreatedBefore, pageNumber, pageSize)
+                    _repository.GetAll(pageNumber, pageSize)
                 );
             }
             catch (Exception e)
@@ -39,50 +39,6 @@ namespace PixelPubApi.Controllers.Resources
                 return Ok(
                     await _repository.GetById(id)
                 );
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public virtual async Task<IActionResult> _delete([FromRoute] int id)
-        {
-            try
-            {
-                await _repository.Delete(id);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public virtual async Task<ActionResult> _create([FromBody] T obj)
-        {
-            try
-            {
-                var results = await _repository.Create(obj);
-
-                return Ok(results);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public virtual async Task<ActionResult> _update([FromRoute] int id, [FromBody] T obj)
-        {
-            try
-            {
-                await _repository.Update(id, obj);
-
-                return Ok(obj);
             }
             catch (Exception e)
             {

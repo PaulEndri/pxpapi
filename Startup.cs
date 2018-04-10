@@ -8,12 +8,11 @@ using PixelPubApi.Interfaces;
 using PixelPubApi.Middleware;
 using PixelPubApi.Models.Settings;
 using PixelPubApi.Repository;
+using PixelPubApi.Providers;
 using PixelPubApi.MySQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.EntityFrameworkCore;
-using MySql.Data.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -39,11 +38,12 @@ namespace PixelPubApi
             // Database connection
             var dbString = Environment.GetEnvironmentVariable("DBConnection");
 
-            services.AddDbContext<WrathIncarnateContext>(options => options.UseMySQL(dbString));
-
             // Singleton Services
             services.AddSingleton<IRestClientFactory, RestClientFactory>();
 
+            // Transient services
+            services.AddTransient<WrathIncarnateContext>(s => new WrathIncarnateContext(dbString));
+            services.AddTransient<IApiAccessProvider, ApiAccessProvider>();
 
             // config settings
             services.Configure<List<RestSource>>(Configuration.GetSection("RestEndpoints"));

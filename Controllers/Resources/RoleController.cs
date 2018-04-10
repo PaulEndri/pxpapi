@@ -17,18 +17,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace PixelPubApi.Controllers.Resources
 {
     [Route("api/[controller]")]
-    public class ClanController : ResourceController<Clan>
+    public class RoleController : ResourceController<DiscordRole>
     {
 
-        public ClanController(WrathIncarnateContext context)
+        public RoleController(WrathIncarnateContext context)
         {
-            _repository        = new ApiRepository<Clan>(context);
+            _repository        = new ApiRepository<DiscordRole>(context);
             _context           = context;
         }
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Clan>), 200)]
+        [ProducesResponseType(typeof(List<DiscordRole>), 200)]
         public async Task<ActionResult> get([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1) {
             try {
                 return Ok(await _repository.GetAll(pageNumber, pageSize));
@@ -38,7 +38,7 @@ namespace PixelPubApi.Controllers.Resources
         }
 
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(Clan), 200)]
+        [ProducesResponseType(typeof(DiscordRole), 200)]
         public async Task<IActionResult> getOne([FromRoute] int id)
         {
             return await _getOne(id);

@@ -1,21 +1,23 @@
 #region
 
+using System;
 using PixelPubApi.Models.Entities;
-using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 
 #endregion
 
 namespace PixelPubApi.MySQL
 {
-    public class WrathIncarnateContext : DbContext
+    public class WrathIncarnateContext : IDisposable
     {
+        public MySqlConnection connection;
 
-        public WrathIncarnateContext(DbContextOptions<WrathIncarnateContext> options)
-            : base(options)
-        { }
-        public DbSet<Clan> Clans { get; set; }
-        public DbSet<Member> Members { get; set; }
-        public DbSet<Membership> Memberships { get; set; }
-        public DbSet<ApiAccess> ApiAccess { get; set; }
+        public WrathIncarnateContext(string connectionString) {
+            connection = new MySqlConnection(connectionString);
+        }
+
+        public void Dispose() {
+            connection.Close();
+        }
     }
 }
